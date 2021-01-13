@@ -425,27 +425,25 @@ void loop()
     //frame.piexls_diff
     //frame.index
     //track.time
-    Serial.print("Piexls_diff:");
-    for (int i = 0; i < 16; i++)
-    {
-        Serial.print(frame.piexls_diff[i]);
-        Serial.print(" ");
-    }
-    Serial.println();
-
-    Serial.print("Diff_var:");
-    for (int i = 0; i < 16; i++){
-        Serial.print(frame.col_diff_var[i]);
-        Serial.print(" ");
-    }
-    Serial.println();
-
-    Serial.print("Diff_final:");
-    for (int i = 0; i < 16; i++){
-        Serial.print(frame.col_diff_final[i]);
-        Serial.print(" ");
-    }
-    Serial.println();
+    // Serial.print("Piexls_diff:");
+    // for (int i = 0; i < 16; i++)
+    // {
+    //     Serial.print(frame.piexls_diff[i]);
+    //     Serial.print(" ");
+    // }
+    // Serial.println();
+    // Serial.print("Diff_var:");
+    // for (int i = 0; i < 16; i++){
+    //     Serial.print(frame.col_diff_var[i]);
+    //     Serial.print(" ");
+    // }
+    // Serial.println();
+    // Serial.print("Diff_final:");
+    // for (int i = 0; i < 16; i++){
+    //     Serial.print(frame.col_diff_final[i]);
+    //     Serial.print(" ");
+    // }
+    // Serial.println();
 
     Serial.print("Index:");
     for (float i : frame.diff_index)
