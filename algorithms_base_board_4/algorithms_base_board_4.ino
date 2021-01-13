@@ -48,7 +48,7 @@ public:
     float col_diff_mean[16];
     float col_diff_var[16];
     float col_diff_final[16];
-    // vector<float> index;
+    
     vector<float> diff_index;
     float index_mean;
 
@@ -68,68 +68,15 @@ public:
             piexls_diff[i] = piexls[i] - piexls_past[i];
         }
 
-        // piexls_mean = cal0();
-        // cal_mean();
-        // cal_var();
-        // cal_diff();
-        // cal_final();
         cal_diff_max();
         cal_diff_mean();
         cal_diff_var();
         cal_diff_final();
         cal_diff_index();
-        // indexCal();
-        // indexmean();
+
         diff_indexmean();
     }
 
-    // 计算帧平均温度
-    float cal0()
-    {
-        float sum = 0;
-        for (int i = 0; i <= 191; i++)
-        {
-            sum += piexls[i];
-        }
-        return sum / 192;
-    }
-
-    // 计算列平均温度
-    void cal_mean()
-    {
-        for (int i = 0; i <= 15; i++)
-        {
-            float sum = 0;
-            for (int j = 0; j <= 11; j++)
-            {
-                sum += piexls[16 * j + i];
-            }
-            col_mean[i] = sum / 12;
-        }
-    }
-
-    // 计算列方差
-    void cal_var()
-    {
-        for (int i = 0; i <= 15; i++)
-        {
-            float sum = 0;
-            for (int j = 0; j <= 11; j++)
-            {
-                sum += pow(col_mean[i] - piexls[16 * j + i], 2);
-            }
-            col_var[i] = sum / 12;
-        }
-    }
-
-    // 计算列与帧的温差
-    void cal_diff()
-    {
-        for (int i = 0; i <= 15; i++)
-        {
-            col_diff[i] = col_mean[i] - piexls_mean;
-        }
-    }
 
     // 计算帧差图像的列最大值
     void cal_diff_max()
@@ -139,10 +86,10 @@ public:
             float max = 0;
             for (int j = 0; j <= 11; j++)
             {
-                if piexls_diff
-                    [16 * j + i] > max {
+                if (piexls_diff[16 * j + i] > max) {
                         max = piexls[16 * j + i];
-                    } col_diff_max[i] = max;
+                    } 
+                col_diff_max[i] = max;
             }
         }
     }
@@ -167,7 +114,7 @@ public:
             float sum = 0;
             for (int j = 0; j <= 11; j++)
             {
-                sum += pow(col_mean[i] - piexls_diff[16 * j + i], 2);
+                sum += pow(col_diff_mean[i] - piexls_diff[16 * j + i], 2);
             }
             col_diff_var[i] = sum / 12;
         }
@@ -177,66 +124,12 @@ public:
     {
         for (int i = 0; i <= 15; i++)
         {
-            col_diff_final[i] = col_diff_var * col_diff_var + col_diff_max * col_diff_max;
+            col_diff_final[i] = col_diff_var[i]  + col_diff_max[i] ;
         }
     }
 
-    // 最终用来判断有无人的col
-    void cal_final()
-    {
-        for (int i = 0; i <= 15; i++)
-        {
-            col_final[i] = 4 * col_diff[i] + 10 * col_var[i];
-        }
-    }
-
-    void indexCal()
-    {
-        int count = 0;
-        for (int i = 0; i <= 15; i++)
-        {
-            if (col_final[i] >= 20)
-            {
-                count += 1;
-            }
-            else
-            {
-                col_final[i] = -1;
-            }
-        }
-        if (count <= 1)
-        {
-            index.push_back(-1);
-            return;
-        }
-        for (int i = 0; i <= 15; i++)
-        {
-            if (col_final[i] < 0)
-            {
-                continue;
-            }
-            int track_point = 0;
-            double sum_i = 0;
-            double sum_col_i = 0;
-            while ((i <= 15) && (col_final[i] > 0))
-            {
-                track_point += 1;
-                sum_i += col_final[i];
-                sum_col_i += i * col_final[i];
-                i++;
-            }
-            double a = sum_col_i / sum_i;
-            if ((track_point > 1) && (a > 2) && (a < 13))
-            {
-                index.push_back(a);
-            }
-        }
-        if (index.size() == 0)
-        {
-            index.push_back(-1);
-        }
-    }
-
+  
+   
     void cal_diff_index()
     {
         int count = 0;
@@ -284,15 +177,6 @@ public:
         }
     }
 
-    void indexmean()
-    {
-        float sum = 0;
-        for (int i = 0; i <= index.size() - 1; i++)
-        {
-            sum += index[i];
-        }
-        index_mean = sum / index.size();
-    }
 
     void diff_indexmean()
     {
@@ -540,7 +424,7 @@ void setup()
 
 Track track;
 
-float piexls_past[192]=[0];
+float piexls_past[192]={0};
 
 
 void loop()
@@ -583,7 +467,7 @@ void loop()
     Serial.print("HZ:");
     Serial.println(1000 / (stopTime - startTime));
     Serial.print("NUM:");
-    Serial.println(track.num)
+    Serial.println(track.num);
 
     for (int i = 0; i <= 191; i++)
     {
