@@ -435,6 +435,7 @@ void loop()
     Serial.print("Diff_final:");
     for (int i = 0; i < 16; i++){
         Serial.print(frame.col_diff_final[i]);
+        Serial.print(" ");
     }
     Serial.println();
 
