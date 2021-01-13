@@ -39,16 +39,10 @@ public:
     float piexls[192];
     float piexls_past[192];
     float piexls_diff[192];
-    // float piexls_mean;
-    // float col_mean[16];
-    // float col_var[16];
-    // float col_diff[16];
-    // float col_final[16];
     float col_diff_max[16];
     float col_diff_mean[16];
     float col_diff_var[16];
     float col_diff_final[16];
-    
     vector<float> diff_index;
     float index_mean;
 
@@ -77,7 +71,6 @@ public:
         diff_indexmean();
     }
 
-
     // 计算帧差图像的列最大值
     void cal_diff_max()
     {
@@ -86,9 +79,10 @@ public:
             float max = 0;
             for (int j = 0; j <= 11; j++)
             {
-                if (piexls_diff[16 * j + i] > max) {
-                        max = piexls[16 * j + i];
-                    } 
+                if (piexls_diff[16 * j + i] > max)
+                {
+                    max = piexls[16 * j + i];
+                }
                 col_diff_max[i] = max;
             }
         }
@@ -124,12 +118,10 @@ public:
     {
         for (int i = 0; i <= 15; i++)
         {
-            col_diff_final[i] = col_diff_var[i]  + col_diff_max[i] ;
+            col_diff_final[i] = col_diff_var[i] + col_diff_max[i];
         }
     }
 
-  
-   
     void cal_diff_index()
     {
         int count = 0;
@@ -176,7 +168,6 @@ public:
             diff_index.push_back(-1);
         }
     }
-
 
     void diff_indexmean()
     {
@@ -370,9 +361,6 @@ public:
                     //debug
                 }
             }
-            //            if (count > 5){
-            //              count = 2;
-            //            }
             num = num - count;
             //debug
             //client.publish("count",String(count).c_str());
@@ -424,17 +412,34 @@ void setup()
 
 Track track;
 
-float piexls_past[192]={0};
-
+float piexls_past[192] = {0};
 
 void loop()
 {
+    Serial.println("----------loop-running----------");
     long startTime = millis();
-    
     getPiexls();
-    Serial.println("----------running----------");
+    Frame frame(MLX90641To, piexls_past);
+    
 
-    Frame frame(MLX90641To,piexls_past);
+    //debug 串口输出 
+    //frame.piexls_diff 
+    //frame.index 
+    //track.time
+    Serial.print("Piexls_diff:");
+    for (int i = 0; i < 4; i++)
+    {
+        Serial.print(frame.piexls_diff[i]);
+        Serial.print(" ");
+    }
+    Serial.print("Index:");
+    for(float i : frame.diff_index){
+        Serial.print(i);
+    }
+    Serial.print("TRACK-TIME:");
+    Serial.print(track.time);
+
+
     if (frame.index_mean > 0)
     {
         track.time = 0;
