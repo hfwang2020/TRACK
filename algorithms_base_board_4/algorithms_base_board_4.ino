@@ -81,7 +81,7 @@ public:
             {
                 if (piexls_diff[16 * j + i] > max)
                 {
-                    max = piexls[16 * j + i];
+                    max = piexls_diff[16 * j + i];
                 }
                 col_diff_max[i] = max;
             }
