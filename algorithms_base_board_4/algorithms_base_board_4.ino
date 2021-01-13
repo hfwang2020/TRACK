@@ -432,6 +432,14 @@ void loop()
         Serial.print(" ");
     }
     Serial.println();
+
+    Serial.print("Diff_var:");
+    for (int i = 0; i < 16; i++){
+        Serial.print(frame.col_diff_var[i]);
+        Serial.print(" ");
+    }
+    Serial.println();
+
     Serial.print("Diff_final:");
     for (int i = 0; i < 16; i++){
         Serial.print(frame.col_diff_final[i]);
