@@ -405,7 +405,7 @@ void setup()
     //Once params are extracted, we can release eeMLX90641 array
 
     //MLX90641_SetRefreshRate(MLX90641_address, 0x02); //Set rate to 2Hz
-    MLX90641_SetRefreshRate(MLX90641_address, 0x05); //Set rate to 4Hz
+    MLX90641_SetRefreshRate(MLX90641_address, 0x03); //Set rate to 4Hz
     //MLX90641_SetRefreshRate(MLX90641_address, 0x07); //Set rate to 64Hz
     delay(200);
 }
