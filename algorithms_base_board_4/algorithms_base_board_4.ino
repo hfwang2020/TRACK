@@ -420,25 +420,33 @@ void loop()
     long startTime = millis();
     getPiexls();
     Frame frame(MLX90641To, piexls_past);
-    
 
-    //debug 串口输出 
-    //frame.piexls_diff 
-    //frame.index 
+    //debug 串口输出
+    //frame.piexls_diff
+    //frame.index
     //track.time
     Serial.print("Piexls_diff:");
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 16; i++)
     {
         Serial.print(frame.piexls_diff[i]);
         Serial.print(" ");
     }
+    Serial.println();
+    Serial.print("Diff_final:");
+    for (int i = 0; i < 16; i++){
+        Serial.print(frame.col_diff_final[i]);
+    }
+    Serial.println();
+
     Serial.print("Index:");
-    for(float i : frame.diff_index){
+    for (float i : frame.diff_index)
+    {
         Serial.print(i);
     }
+    Serial.println();
+    
     Serial.print("TRACK-TIME:");
     Serial.print(track.time);
-
 
     if (frame.index_mean > 0)
     {
