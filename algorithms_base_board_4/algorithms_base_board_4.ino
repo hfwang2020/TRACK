@@ -421,16 +421,24 @@ void setup()
     //Once params are extracted, we can release eeMLX90641 array
 
     //MLX90641_SetRefreshRate(MLX90641_address, 0x02); //Set rate to 2Hz
-    MLX90641_SetRefreshRate(MLX90641_address, 0x03); //Set rate to 4Hz
-    //MLX90641_SetRefreshRate(MLX90641_address, 0x07); //Set rate to 64Hz
+    MLX90641_SetRefreshRate(MLX90641_address, 0x05); //Set rate to 4Hz
+    //MLX90641_SetRefreshRate(MLX90641_address, 0x07); //Set rate to 64Hz    
+    //MLX90641_SetRefreshRate(MLX90641_address, 0x06); //Set rate to 32Hz
+    //MLX90641_SetRefreshRate(MLX90641_address, 0x05); //Set rate to 16Hz
+    //MLX90641_SetRefreshRate(MLX90641_address, 0x04); //Set rate to 8Hz
+
     delay(200);
 
     Serial.println("----------初始化背景----------");
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 20; i++)
     {
         getPiexls();
+        delay(20);
+        Serial.print("获取第");
+        Serial.print(i);
+        Serial.println("帧 ");
         for (int j = 0; j < 192; j++)
-        {
+        {   
             piexls_past_sum[i][j] = MLX90641To[j];
         }
     }
@@ -470,12 +478,12 @@ void loop()
     //     Serial.print(" ");
     // }
     // Serial.println();
-    // Serial.print("Diff_final:");
-    // for (int i = 0; i < 16; i++){
-    //     Serial.print(frame.col_diff_final[i]);
-    //     Serial.print(" ");
-    // }
-    // Serial.println();
+    Serial.print("Diff_final:");
+    for (int i = 0; i < 16; i++){
+        Serial.print(frame.col_diff_final[i]);
+        Serial.print(" ");
+    }
+    Serial.println();
 
     Serial.print("Index:");
     for (float i : frame.diff_index)
