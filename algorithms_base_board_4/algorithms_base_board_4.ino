@@ -28,12 +28,10 @@ float MLX90641To[192];
 uint16_t MLX90641Frame[242];
 paramsMLX90641 MLX90641;
 int errorno = 0;
-Track track;
 
 float piexls_past[192] = {0};
 float piexls_past_sum[100][192] = {{0}};
 int queue = 0;
-
 
 WiFiClient espClient;
 
@@ -218,6 +216,17 @@ boolean isConnected()
     return (true);
 }
 
+void getPiexls()
+{
+    int status = MLX90641_GetFrameData(MLX90641_address, MLX90641Frame);
+    float vdd = MLX90641_GetVdd(MLX90641Frame, &MLX90641);
+    float Ta = MLX90641_GetTa(MLX90641Frame, &MLX90641);
+    long time3 = millis();
+    float tr = Ta - TA_SHIFT; //Reflected temperature based on the sensor ambient temperature
+    float emissivity = 0.95;
+    MLX90641_CalculateTo(MLX90641Frame, &MLX90641, emissivity, tr, MLX90641To);
+}
+
 class Track
 {
 public:
@@ -375,6 +384,8 @@ public:
     }
 };
 
+Track track;
+
 void setup()
 {
     setup_wifi();
@@ -416,24 +427,26 @@ void setup()
     delay(200);
 
     Serial.println("----------初始化背景----------");
-    for(int i = 0; i < 100; i++){
+
+    for (int i = 0; i < 100; i++)
+    {
         getPiexls;
-        for(int j = 0; j < 192; j++){
+        for (int j = 0; j < 192; j++)
+        {
             piexls_past_sum[i][j] = MLX90641To[j];
         }
-    for(int i = 0; i < 192; i++){
+    }
+    for (int i = 0; i < 192; i++)
+    {
         float sum = 0;
-        for (int j = 0; j < 100; j++){
+        for (int j = 0; j < 100; j++)
+        {
             sum += piexls_past_sum[j][i];
         }
         piexls_past[i] = sum / 100;
     }
-    Serial.println("--------背景初始化完成--------")
-
-
+    Serial.println("--------背景初始化完成--------");
 }
-
-
 
 void loop()
 {
@@ -472,7 +485,7 @@ void loop()
         Serial.print(i);
     }
     Serial.println();
-    
+
     Serial.print("TRACK-TIME:");
     Serial.print(track.time);
 
@@ -509,35 +522,23 @@ void loop()
     Serial.print(1000 / (stopTime - startTime));
     Serial.print("NUM:");
     Serial.println(track.num);
-    
-   
-
 
     for (int i = 0; i <= 191; i++)
     {
         piexls_past_sum[queue][i] = MLX90641To[i];
     }
     queue = queue + 1;
-    if (queue == 100){
+    if (queue == 100)
+    {
         queue = 0;
     }
-    for(int i = 0; i < 192; i++){
+    for (int i = 0; i < 192; i++)
+    {
         float sum = 0;
-        for (int j = 0; j < 100; j++){
+        for (int j = 0; j < 100; j++)
+        {
             sum += piexls_past_sum[j][i];
         }
         piexls_past[i] = sum / 100;
     }
-
-}
-
-void getPiexls()
-{
-    int status = MLX90641_GetFrameData(MLX90641_address, MLX90641Frame);
-    float vdd = MLX90641_GetVdd(MLX90641Frame, &MLX90641);
-    float Ta = MLX90641_GetTa(MLX90641Frame, &MLX90641);
-    long time3 = millis();
-    float tr = Ta - TA_SHIFT; //Reflected temperature based on the sensor ambient temperature
-    float emissivity = 0.95;
-    MLX90641_CalculateTo(MLX90641Frame, &MLX90641, emissivity, tr, MLX90641To);
 }
