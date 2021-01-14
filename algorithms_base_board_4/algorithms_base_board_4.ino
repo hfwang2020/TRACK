@@ -431,6 +431,9 @@ void setup()
     for (int i = 0; i < 100; i++)
     {
         getPiexls;
+        Serial.print("-----获得第");
+        Serial.print(i);
+        Serial.println("帧-----");
         for (int j = 0; j < 192; j++)
         {
             piexls_past_sum[i][j] = MLX90641To[j];
