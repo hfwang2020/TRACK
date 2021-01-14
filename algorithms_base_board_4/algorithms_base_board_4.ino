@@ -30,8 +30,8 @@ paramsMLX90641 MLX90641;
 int errorno = 0;
 
 float piexls_past[192] = {0};
-float piexls_past_sum[100][192] = {{0}};
-int queue = 0;
+// float piexls_past_sum[100][192];
+// int queue = 0;
 
 WiFiClient espClient;
 
@@ -221,7 +221,6 @@ void getPiexls()
     int status = MLX90641_GetFrameData(MLX90641_address, MLX90641Frame);
     float vdd = MLX90641_GetVdd(MLX90641Frame, &MLX90641);
     float Ta = MLX90641_GetTa(MLX90641Frame, &MLX90641);
-    long time3 = millis();
     float tr = Ta - TA_SHIFT; //Reflected temperature based on the sensor ambient temperature
     float emissivity = 0.95;
     MLX90641_CalculateTo(MLX90641Frame, &MLX90641, emissivity, tr, MLX90641To);
@@ -426,29 +425,25 @@ void setup()
     //MLX90641_SetRefreshRate(MLX90641_address, 0x07); //Set rate to 64Hz
     delay(200);
 
-    Serial.println("----------初始化背景----------");
-
-    for (int i = 0; i < 100; i++)
-    {
-        getPiexls;
-        Serial.print("-----获得第");
-        Serial.print(i);
-        Serial.println("帧-----");
-        for (int j = 0; j < 192; j++)
-        {
-            piexls_past_sum[i][j] = MLX90641To[j];
-        }
-    }
-    for (int i = 0; i < 192; i++)
-    {
-        float sum = 0;
-        for (int j = 0; j < 100; j++)
-        {
-            sum += piexls_past_sum[j][i];
-        }
-        piexls_past[i] = sum / 100;
-    }
-    Serial.println("--------背景初始化完成--------");
+    // Serial.println("----------初始化背景----------");
+    // for (int i = 0; i < 100; i++)
+    // {
+    //     getPiexls;
+    //     for (int j = 0; j < 192; j++)
+    //     {
+    //         piexls_past_sum[i][j] = MLX90641To[j];
+    //     }
+    // }
+    // for (int i = 0; i < 192; i++)
+    // {
+    //     float sum = 0;
+    //     for (int j = 0; j < 100; j++)
+    //     {
+    //         sum += piexls_past_sum[j][i];
+    //     }
+    //     piexls_past[i] = sum / 100;
+    // }
+    // Serial.println("--------背景初始化完成--------");
 }
 
 void loop()
@@ -528,20 +523,26 @@ void loop()
 
     for (int i = 0; i <= 191; i++)
     {
-        piexls_past_sum[queue][i] = MLX90641To[i];
+        piexls_past[i] = MLX90641To[i];
     }
-    queue = queue + 1;
-    if (queue == 100)
-    {
-        queue = 0;
-    }
-    for (int i = 0; i < 192; i++)
-    {
-        float sum = 0;
-        for (int j = 0; j < 100; j++)
-        {
-            sum += piexls_past_sum[j][i];
-        }
-        piexls_past[i] = sum / 100;
-    }
+
+    // for (int i = 0; i <= 191; i++)
+    // {
+    //     piexls_past_sum[queue][i] = MLX90641To[i];
+    // }
+    // queue = queue + 1;
+    // if (queue == 100)
+    // {
+    //     queue = 0;
+    // }
+    // for (int i = 0; i < 192; i++)
+    // {
+    //     float sum = 0;
+    //     for (int j = 0; j < 100; j++)
+    //     {
+    //         sum += piexls_past_sum[j][i];
+    //     }
+    //     piexls_past[i] = sum / 100;
+    // }
+    
 }
