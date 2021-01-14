@@ -246,6 +246,7 @@ public:
         {
             flag = -1;
         }
+
         if (flag == 1)
         {
             for (int i = 1; i <= pointList.size() - 1; i++)
@@ -294,11 +295,11 @@ public:
                     count += 1;
                 }
             }
-               }
-            num = num + count;
-            
+            num = num + count;           
         }
-        if (flag == 1)
+
+
+        if (flag == -1)
         {
             for (int i = 1; i <= pointList.size() - 1; i++)
             {
@@ -344,8 +345,7 @@ public:
             {
                 if (track_list[i][0] < 8 && track_list[i][track_list[i].size() - 1] > 7 && track_list[i].size() >= 3)
                 {
-                    count += 1;
-                    
+                    count += 1;                  
                 }
             }
             num = num - count;
