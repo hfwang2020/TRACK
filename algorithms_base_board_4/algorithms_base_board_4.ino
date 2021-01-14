@@ -240,13 +240,13 @@ public:
         vector<vector<float>> track_list;
         if (pointList[1][0] > 7)
         {
-            flag = -1;
+            flag = 1;
         }
         if (pointList[1][0] < 7)
         {
-            flag = 1;
+            flag = -1;
         }
-        if (flag == -1)
+        if (flag == 1)
         {
             for (int i = 1; i <= pointList.size() - 1; i++)
             {
@@ -292,27 +292,11 @@ public:
                 if (track_list[i][0] > 8 && track_list[i][track_list[i].size() - 1] < 8 && track_list[i].size() >= 3)
                 {
                     count += 1;
-                    //debug
-                    //                    String msg = "track:[";
-                    //                    for(float point:track_list[i]){
-                    //                        msg+=String(point);
-                    //                        msg+=" ";
-                    //                    }
-                    //                    msg+="]";
-                    //                    if(!client.connected()){
-                    //                        reconnect();
-                    //                    }
-                    //                    client.publish("track", msg.c_str());
-                    //debug
                 }
             }
-            //            if (count>5){
-            //              count = 2;
-            //            }
+               }
             num = num + count;
-            //debug
-            //client.publish("count",String(count).c_str());
-            //debug
+            
         }
         if (flag == 1)
         {
@@ -361,24 +345,10 @@ public:
                 if (track_list[i][0] < 8 && track_list[i][track_list[i].size() - 1] > 7 && track_list[i].size() >= 3)
                 {
                     count += 1;
-                    //debug
-                    //                    String msg = "track:[";
-                    //                    for(float point:track_list[i]){
-                    //                        msg+=String(point);
-                    //                        msg+=" ";
-                    //                    }
-                    //                    msg+="]";
-                    //                    if(!client.connected()){
-                    //                        reconnect();
-                    //                    }
-                    //                    client.publish("track", msg.c_str());
-                    //debug
+                    
                 }
             }
             num = num - count;
-            //debug
-            //client.publish("count",String(count).c_str());
-            //debug
         }
     }
 };
@@ -478,6 +448,7 @@ void loop()
     //     Serial.print(" ");
     // }
     // Serial.println();
+
     Serial.print("Diff_final:");
     for (int i = 0; i < 16; i++){
         Serial.print(frame.col_diff_final[i]);
@@ -486,6 +457,7 @@ void loop()
     Serial.println();
 
     Serial.print("Index:");
+
     for (float i : frame.diff_index)
     {
         Serial.print(i);
@@ -507,6 +479,7 @@ void loop()
     {
         track.time += 1;
     }
+
     if (track.time >= 20 && track.pointList.size() >= 3)
     {
         track.judge();
@@ -516,7 +489,8 @@ void loop()
         track.time = 0;
     }
 
-    if (track.time >= 100 && track.pointList.size() <= 2)
+    // if (track.time >= 100 && track.pointList.size() <= 2)
+    if ( track.time >= 100 )
     {
         vector<vector<float>> v = {{0}};
         track.pointList = v;
@@ -524,6 +498,7 @@ void loop()
     }
 
     long stopTime = millis();
+    
     Serial.print("HZ:");
     Serial.print(1000 / (stopTime - startTime));
     Serial.print("NUM:");
