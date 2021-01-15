@@ -311,9 +311,8 @@ public:
                     }
                     else if (track_list.size() == 1)
                     {
-                        if (pointList[i][j] > track_list[0][track_list.size() - 1])
+                        if (pointList[i][j] < track_list[0][track_list.size() - 1])
                         {
-
                             track_list.push_back({pointList[i][j]});
                         }
                         else
@@ -351,6 +350,7 @@ public:
             num = num - count;
         }
     }
+    
 };
 
 Track track;
