@@ -131,7 +131,7 @@ public:
         int count = 0;
         for (int i = 0; i <= 15; i++)
         {
-            if (col_diff_final[i] >= 1.25)
+            if (col_diff_final[i] >= 1.5)
             {
                 count += 1;
             }
@@ -295,7 +295,10 @@ public:
                     count += 1;
                 }
             }
-            num = num + count;           
+            num = num + count; 
+            Serial.print("----------进来 ");
+            Serial.print(count);
+            Serial.println(" 人---------");          
         }
 
 
@@ -348,9 +351,12 @@ public:
                 }
             }
             num = num - count;
+            Serial.print("----------出去 ");
+            Serial.print(count);
+            Serial.println(" 人---------");
         }
     }
-    
+
 };
 
 Track track;
@@ -448,13 +454,13 @@ void loop()
     //     Serial.print(" ");
     // }
     // Serial.println();
-
-    Serial.print("Diff_final:");
-    for (int i = 0; i < 16; i++){
-        Serial.print(frame.col_diff_final[i]);
-        Serial.print(" ");
-    }
-    Serial.println();
+    // 输出 diff_final
+    // Serial.print("Diff_final:");
+    // for (int i = 0; i < 16; i++){
+    //     Serial.print(frame.col_diff_final[i]);
+    //     Serial.print(" ");
+    // }
+    // Serial.println();
 
     Serial.print("Index:");
 
@@ -480,7 +486,7 @@ void loop()
         track.time += 1;
     }
 
-    if (track.time >= 20 && track.pointList.size() >= 3)
+    if (track.time >= 10 && track.pointList.size() >= 3)
     {
         track.judge();
         Serial.println("-----judge running-----");
